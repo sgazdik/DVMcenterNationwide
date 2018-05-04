@@ -28,6 +28,7 @@
       "esri/widgets/ScaleBar",
       "esri/widgets/Search",
       "esri/widgets/Home",
+      "dojo/dom-construct",
       "dojo/domReady!"
     ], function(
       Map,
@@ -35,7 +36,8 @@
       KMLLayer,
       ScaleBar,
       Search,
-      Home
+      Home,
+      domConstruct
     ) {
 
       var layer1 = new KMLLayer({
@@ -126,6 +128,15 @@
 
       // Add the home button to the top left corner of the view
       view.ui.add(homeBtn, "top-left");
+
+      var logo = domConstruct.create("img", {
+        src: "https://docs.google.com/uc?id=1N5lmwsAwKPFFhXYKcqXfeHmHLjREJEr5&amp;export=png",
+        id: "logo",
+        title: "logo"
+      });
+
+      view.ui.add(logo, "bottom-right");
+      view.ui.add(search, "top-right");
     });
   </script>
 
