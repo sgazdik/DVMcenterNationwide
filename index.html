@@ -27,13 +27,15 @@
       "esri/layers/KMLLayer",
       "esri/widgets/ScaleBar",
       "esri/widgets/Search",
+      "esri/widgets/Home",
       "dojo/domReady!"
     ], function(
       Map,
       MapView,
       KMLLayer,
       ScaleBar,
-      Search
+      Search,
+      Home
     ) {
 
       var layer1 = new KMLLayer({
@@ -117,6 +119,13 @@
       view.ui.add(searchWidget, {
         position: "top-right"
       });
+
+      var homeBtn = new Home({
+        view: view
+      });
+
+      // Add the home button to the top left corner of the view
+      view.ui.add(homeBtn, "top-left");
     });
   </script>
 
