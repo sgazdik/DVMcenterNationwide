@@ -23,6 +23,7 @@
   <script>
     require([
       "esri/Map",
+      "esri/Graphic",
       "esri/views/MapView",
       "esri/layers/KMLLayer",
       "esri/widgets/ScaleBar",
@@ -32,6 +33,7 @@
       "dojo/domReady!"
     ], function(
       Map,
+      Graphic,
       MapView,
       KMLLayer,
       ScaleBar,
@@ -84,7 +86,27 @@
       });
 
       view.ui.add(logo, "bottom-right");
-      view.ui.add(search, "top-right");
+      // view.ui.add(search, "top-right");
+      window.view = view;
+
+      var highlighted;
+
+      view.popup.watch('selectedFeature', feature => { 
+        if(highlighted){
+          view.graphics.remove(highlighted);
+        }
+          highlighted = new Graphic();
+          highlighted.geometry = feature.geometry;
+          highlighted.symbol = {
+            type: "simple-fill",  // autocasts as new SimpleFillSymbol()
+            style: "solid",
+            outline: {  // autocasts as new SimpleLineSymbol()
+              color: "black",
+              width: 2
+            }
+          };
+          view.graphics.add(highlighted);
+      });
     });
   </script>
 
