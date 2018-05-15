@@ -24,12 +24,12 @@
          left: 74px;
       }
 	  
-	  #HomeButton {
-      position: absolute;
-      top: 95px;
-      left: 20px;
-      z-index: 50;
-    }
+	#HomeButton {
+         position: absolute;
+         top: 95px;
+         left: 20px;
+         z-index: 50;
+      }
   </style>
 
    <link rel="stylesheet" href="https://js.arcgis.com/3.24/dijit/themes/tundra/tundra.css">
@@ -55,7 +55,7 @@
       Search,
       HomeButton,
       domConstruct,
-	  InfoWindowLite,
+      InfoWindowLite,
     ) {
 
       var layer1 = new KMLLayer("https://docs.google.com/uc?id=1gnr7lDMzjiyKJQAXLnbgOP65sotZJItu&amp;export=kmz");
@@ -91,6 +91,7 @@
       var homeBtn = new HomeButton({
         map: map
       },"HomeButton");
+       homeBtn.startup();
 
       // Add the home button to the top left corner of the view
       //view.ui.add(homeBtn, "top-left");
