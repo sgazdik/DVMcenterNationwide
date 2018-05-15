@@ -9,89 +9,105 @@
   <style>
     html,
     body,
-    #viewDiv {
+    #map {
       padding: 0;
       margin: 0;
       height: 100%;
       width: 100%;
     }
+	
+	#search {
+         display: block;
+         position: absolute;
+         z-index: 2;
+         top: 20px;
+         left: 74px;
+      }
+	  
+	  #HomeButton {
+      position: absolute;
+      top: 95px;
+      left: 20px;
+      z-index: 50;
+    }
   </style>
 
-  <link rel="stylesheet" href="https://js.arcgis.com/4.7/esri/css/main.css">
-  <script src="https://js.arcgis.com/4.7/"></script>
+   <link rel="stylesheet" href="https://js.arcgis.com/3.24/dijit/themes/tundra/tundra.css">
+   <link rel="stylesheet" href="https://js.arcgis.com/3.24/esri/css/esri.css">
+   
+   <script src="https://js.arcgis.com/3.24/"></script>
 
   <script>
     require([
-      "esri/Map",
-      "esri/Graphic",
-      "esri/views/MapView",
+      "esri/map",
+      "esri/graphic",
       "esri/layers/KMLLayer",
-      "esri/widgets/ScaleBar",
-      "esri/widgets/Search",
-      "esri/widgets/Home",
+      "esri/dijit/Scalebar",
+      "esri/dijit/Search",
+      "esri/dijit/HomeButton",
       "dojo/dom-construct",
       "dojo/domReady!"
     ], function(
       Map,
       Graphic,
-      MapView,
       KMLLayer,
-      ScaleBar,
+      Scalebar,
       Search,
-      Home,
-      domConstruct
+      HomeButton,
+      domConstruct,
+	  InfoWindowLite,
     ) {
 
-      var layer1 = new KMLLayer({
-        url: "https://docs.google.com/uc?id=1gnr7lDMzjiyKJQAXLnbgOP65sotZJItu&amp;export=kmz" // All Clients Simplify
-      });
+      var layer1 = new KMLLayer("https://docs.google.com/uc?id=1gnr7lDMzjiyKJQAXLnbgOP65sotZJItu&amp;export=kmz");
 
-      var map = new Map({
-        basemap: "streets",
-        layers: [layer1]
-      });
+     
+	  var map = new Map("map", {
+          basemap: "streets",
+          center: [-98, 38],
+		  zoom:5
+        });
+		
 
-      var view = new MapView({
-        container: "viewDiv",
+
+      map.addLayer(layer1);
+
+      var scalebar = new Scalebar({
         map: map,
-        center: [-98, 38],
-        zoom: 4.5
+		scalebarUnit: "dual"
       });
-
-      var scalebar = new ScaleBar({
-        view: view
-      });
-      view.ui.add(scalebar, "bottom-left");
+     
       
       var searchWidget = new Search({
-        view: view
-      });
-
+        map: map
+		
+      },"search");
+      searchWidget.startup();
+	  
       // Add the search widget to the top right corner of the view
-      view.ui.add(searchWidget, {
-        position: "top-right"
-      });
+      //view.ui.add(searchWidget, {
+       // position: "top-right"
+      //});
 
-      var homeBtn = new Home({
-        view: view
-      });
+      var homeBtn = new HomeButton({
+        map: map
+      },"HomeButton");
 
       // Add the home button to the top left corner of the view
-      view.ui.add(homeBtn, "top-left");
+      //view.ui.add(homeBtn, "top-left");
 
-      var logo = domConstruct.create("img", {
+      /*var logo = domConstruct.create("img", {
         src: "https://docs.google.com/uc?id=1N5lmwsAwKPFFhXYKcqXfeHmHLjREJEr5&amp;export=png",
         id: "logo",
         title: "logo"
-      });
+      });*/
 
-      view.ui.add(logo, "bottom-right");
+      //view.ui.add(logo, "bottom-right");
       // view.ui.add(search, "top-right");
-      window.view = view;
+      //window.view = view;
 
-      var highlighted;
+      //var highlighted;
 
-      view.popup.watch('selectedFeature', feature => { 
+      /*view.popup.watch('selectedFeature', feature => { 
         if(highlighted){
           view.graphics.remove(highlighted);
         }
@@ -106,14 +122,17 @@
             }
           };
           view.graphics.add(highlighted);
-      });
+      });*/
     });
   </script>
 
 </head>
 
 <body>
-  <div id="viewDiv">
+  <div id="map">
+  <div id="HomeButton"></div>
+  <div id="search"></div>
+  <img src="https://docs.google.com/uc?id=1N5lmwsAwKPFFhXYKcqXfeHmHLjREJEr5&amp;export=png" style="position:absolute;z-index:999;right:100px;top:90%;margin-bottom:50px;" />
 </div>
 </body>
 
