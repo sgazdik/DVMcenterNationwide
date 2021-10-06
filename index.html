@@ -1,141 +1,85 @@
-<!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="initial-scale=1,maximum-scale=1,user-scalable=no"
+    />
+    <title>DVMCenter Nationwide Clients Map</title>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
-  <title>DVMcenter Nationwide Clients Service Areas</title>
-
-  <style>
-    html,
-    body,
-    #map {
-      padding: 0;
-      margin: 0;
-      height: 100%;
-      width: 100%;
-    }
-	
-	#search {
-         display: block;
-         position: absolute;
-         z-index: 2;
-         top: 20px;
-         left: 74px;
+    <style>
+      html,
+      body,
+      #viewDiv {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
       }
-	  
-	#HomeButton {
-         position: absolute;
-         top: 95px;
-         left: 20px;
-         z-index: 50;
-      }
-  </style>
+    </style>
 
-   <link rel="stylesheet" href="https://js.arcgis.com/3.24/dijit/themes/tundra/tundra.css">
-   <link rel="stylesheet" href="https://js.arcgis.com/3.24/esri/css/esri.css">
-   
-   <script src="https://js.arcgis.com/3.24/"></script>
+    <link
+      rel="stylesheet"
+      href="https://js.arcgis.com/4.21/esri/themes/light/main.css"
+    />
 
-  <script>
-    require([
-      "esri/map",
-      "esri/graphic",
-      "esri/layers/KMLLayer",
-      "esri/dijit/Scalebar",
-      "esri/dijit/Search",
-      "esri/dijit/HomeButton",
-      "dojo/dom-construct",
-      "dojo/domReady!"
-    ], function(
-      Map,
-      Graphic,
-      KMLLayer,
-      Scalebar,
-      Search,
-      HomeButton,
-      domConstruct,
-      InfoWindowLite,
-    ) {
+    <script src="https://js.arcgis.com/4.21/"></script>
 
-      var layer1 = new KMLLayer("https://www.arcgis.com/sharing/rest/content/items/10688b074282471a8ca28b8db6e724fb/data");
-
-     
-	  var map = new Map("map", {
-          basemap: "streets",
-          center: [-98, 38],
-		  zoom:5
+    <script>
+      require(["esri/views/MapView", "esri/WebMap", "esri/widgets/ScaleBar", "esri/widgets/Search", "esri/widgets/Home"], (MapView, WebMap, ScaleBar, Search, Home) => {
+        /************************************************************
+         * Creates a new WebMap instance. A WebMap must reference
+         * a PortalItem ID that represents a WebMap saved to
+         * arcgis.com or an on-premise portal.
+         *
+         * To load a WebMap from an on-premise portal, set the portal
+         * url with esriConfig.portalUrl.
+         ************************************************************/
+        const webmap = new WebMap({
+          portalItem: {
+            // autocasts as new PortalItem()
+            id: "7e6d539fba014c1bb768ab54114739c1"
+          }
         });
-		
 
+        /************************************************************
+         * Set the WebMap instance to the map property in a MapView.
+         ************************************************************/
+        const view = new MapView({
+          map: webmap,
+          container: "viewDiv"
 
-      map.addLayer(layer1);
+        });
+        var scalebar = new ScaleBar({
+          view: view
+        });
+        view.ui.add(scalebar, "bottom-left");
 
-      var scalebar = new Scalebar({
-        map: map,
-		scalebarUnit: "dual"
+        var searchWidget = new Search({
+          view: view,
+          zoomScale: 48000
+        });
+        view.ui.add(searchWidget, {
+          position: "top-left"
+        });
+
+        var homeBtn = new Home({
+          view: view
+        });
+
+        // Add the home button to the top left corner of the view
+        view.ui.add(homeBtn, "top-left");
       });
-     
-      
-      var searchWidget = new Search({
-        map: map,
-        zoomScale: 48000
-		
-      },"search");
-      searchWidget.startup();
-	  
-      // Add the search widget to the top right corner of the view
-      //view.ui.add(searchWidget, {
-       // position: "top-right"
-      //});
+    </script>
+  </head>
 
-      var homeBtn = new HomeButton({
-        map: map
-      },"HomeButton");
-       homeBtn.startup();
-
-      // Add the home button to the top  left corner of the view
-      //view.ui.add(homeBtn, "top-left");
-
-      /*var logo = domConstruct.create("img", {
-        src: "https://docs.google.com/uc?id=1N5lmwsAwKPFFhXYKcqXfeHmHLjREJEr5&amp;export=png",
-        id: "logo",
-        title: "logo"
-      });*/
-
-      //view.ui.add(logo, "bottom-right");
-      // view.ui.add(search, "top-right");
-      //window.view = view;
-
-      //var highlighted;
-
-      /*view.popup.watch('selectedFeature', feature => { 
-        if(highlighted){
-          view.graphics.remove(highlighted);
-        }
-          highlighted = new Graphic();
-          highlighted.geometry = feature.geometry;
-          highlighted.symbol = {
-            type: "simple-fill",  // autocasts as new SimpleFillSymbol()
-            style: "solid",
-            outline: {  // autocasts as new SimpleLineSymbol()
-              color: "black",
-              width: 2
-            }
-          };
-          view.graphics.add(highlighted);
-      });*/
-    });
-  </script>
-
-</head>
-
-<body>
-  <div id="map">
-  <div id="HomeButton"></div>
-  <div id="search"></div>
-  <img src="https://docs.google.com/uc?id=1N5lmwsAwKPFFhXYKcqXfeHmHLjREJEr5&amp;export=png" style="position:absolute;z-index:999;right:100px;top:90%;margin-bottom:50px;" />
-</div>
-</body>
-
+  <body>
+    <div id="viewDiv"></div>
+    <div id="Home"></div>
+    <div id="Search"></div>
+    <img
+      src="https://docs.google.com/uc?id=1N5lmwsAwKPFFhXYKcqXfeHmHLjREJEr5&amp;export=png"
+      style="position:absolute;z-index:999;right:20px;top:90%;margin-bottom:50px;"
+    />
+  </body>
 </html>
